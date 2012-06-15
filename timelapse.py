@@ -21,7 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import numpy as np
 import scipy.signal
-import pdb
+
+DEBUG = True
+
+if DEBUG:
+    import pdb
+    import Image as Img
 
 def get_offset(im1, im2, im1_rect=None, im2_rect=None, hamming=False):
     """Get the translation offset between two similar images that are 
@@ -71,6 +76,12 @@ def get_offset(im1, im2, im1_rect=None, im2_rect=None, hamming=False):
     xcorr = scipy.signal.fftconvolve(im1, im2[::-1, ::-1])
     """Do the cross-correlation, which requires flipping im2"""
     
+    if DEBUG:
+        xcorr_img = xcorr * 255 / xcorr.max()
+        xcorr_img = Img.fromarray(np.uint8(xcorr_img))
+        xcorr_img.show()
+        xcorr_img.save("images/xcorr_test.png")
+
     xcorr_max = np.unravel_index(xcorr.argmax(), xcorr.shape)
     offset = (xcorr_max[1] - im2_rect[1][0], xcorr_max[0] - im2_rect[1][1])
     
