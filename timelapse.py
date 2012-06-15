@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 import numpy as np
 import scipy.signal
+import scipy.ndimage
 
 DEBUG = True
 
@@ -77,17 +78,26 @@ def get_offset(im1, im2, im1_rect=None, im2_rect=None, hamming=False):
     """Do the cross-correlation, which requires flipping im2"""
     
     if DEBUG:
-        xcorr_img = xcorr * 255 / xcorr.max()
-        xcorr_img = Img.fromarray(np.uint8(xcorr_img))
-        xcorr_img.show()
-        xcorr_img.save("images/xcorr_test.png")
+        _show_array(xcorr)
+        _save_array(xcorr, "images/xcorr_test.png")
 
     xcorr_max = np.unravel_index(xcorr.argmax(), xcorr.shape)
     offset = (xcorr_max[1] - im2_rect[1][0], xcorr_max[0] - im2_rect[1][1])
     
     return offset
     
+def shift(arr, shift):
+    return scipy.ndimage.shift(arr, shift)
+    
+def align(im1, im2
 
+def _show_array(arr):
+    _array_to_image(arr).show()
 
-def deflicker():
-    raise NotImplementedException 
+def _save_array(arr, filename):
+    _array_to_image(arr).save(fname)
+
+def _array_to_image(arr):
+    img = arr * 255 / arr.max()
+    img = Img.fromarray(np.uint8(img))
+    return img
