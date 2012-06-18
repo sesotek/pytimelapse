@@ -89,13 +89,14 @@ def get_offset(im1, im2, im1_rect=None, im2_rect=None, hamming=False):
 def shift(arr, shift):
     return scipy.ndimage.shift(arr, shift)
     
-def align(im1, im2
+def align(im1, im2):
+    return shift(im2, get_offset(im1, im2))
 
 def _show_array(arr):
     _array_to_image(arr).show()
 
 def _save_array(arr, filename):
-    _array_to_image(arr).save(fname)
+    _array_to_image(arr).save(filename)
 
 def _array_to_image(arr):
     img = arr * 255 / arr.max()
